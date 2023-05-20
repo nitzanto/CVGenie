@@ -10,7 +10,7 @@ export default function NewPost(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("/api/generatePost", {
+    const response = await fetch(`/api/generatePost`, {
       method: "POST",
       headers: {
         'content-type' : 'application/json',
