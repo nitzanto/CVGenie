@@ -5,8 +5,8 @@ import clientPromise from "../../lib/mongodb";
 export default withApiAuthRequired(async function handler(req, res) {
   const { user } = await getSession(req, res);
   const client = await clientPromise;
-  const db = client.db("WebApp");
-  const userProfile = await db.collection("users").findOne({
+  const db = client.db('WebApp');
+  const userProfile = await db.collection('users').findOne({
     auth0Id : user.sub
   });
 
@@ -42,7 +42,7 @@ export default withApiAuthRequired(async function handler(req, res) {
   });
 
   const postContent =
-    postContentResponse.data.choices[0]?.message?.content || "";
+    postContentResponse.data.choices[0]?.message?.content;
 
   const titleResponse = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
@@ -107,7 +107,7 @@ export default withApiAuthRequired(async function handler(req, res) {
   console.log("TITLE: ", title);
   console.log("META DESCRIPTION", metaDescription);*/
 
-  await db.collection("users").updateOne({
+  await db.collection('users').updateOne({
     auth0Id: user.sub
   }, {
     $inc: {
@@ -116,25 +116,19 @@ export default withApiAuthRequired(async function handler(req, res) {
   });
 
 
-  const parsed =  {
-    postContent,
-    title,
-    metaDescription,
-  }
-
-  const post = await db.collection("posts").insertOne({
+  const post = await db.collection('posts').insertOne({
     postContent: postContent || '',
     title: title || '',
     metaDescription: metaDescription || '',
     topic,
     keywords,
-    userID: userProfile._id,
+    userId: userProfile._id,
     created: new Date()
   })
 
   console.log("POST: ", post);
 
   res.status(200).json({
-    postId: post.insertedId,
+    postID: post.insertedId,
   });
 });

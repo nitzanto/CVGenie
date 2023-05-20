@@ -11,7 +11,7 @@ export default function NewPost(props) {
     e.preventDefault();
 
     const response = await fetch(`/api/generatePost`, {
-      method: "POST",
+      method: 'POST',
       headers: {
         'content-type' : 'application/json',
       },
@@ -21,8 +21,8 @@ export default function NewPost(props) {
 
     const json = await response.json();
     console.log("Result: ", json);
-    if(json?.postId){
-      router.push(`/post/${json.postId}`)
+    if(json?.postID){
+      router.push(`/post/${json.postID}`)
     }
   };
 

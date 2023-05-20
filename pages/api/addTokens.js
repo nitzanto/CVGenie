@@ -8,9 +8,9 @@ export default async function handler(req, res) {
 
   const client = await clientPromise;
 
-  const db = client.db("WebApp");
+  const db = client.db('WebApp');
 
-  const userProfile = await db.collection("users").updateOne(
+  const userProfile = await db.collection('users').updateOne(
     {
       auth0Id: user.sub
     },
