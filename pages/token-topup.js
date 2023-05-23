@@ -20,10 +20,11 @@ export default function TokenTopUp() {
     return <AppLayout {...pageProps}>{page}</AppLayout>
 }
 
-  export const getServerSideProps = withPageAuthRequired(() => {
-
-    return {
-        props: {},
-    };
-
+  export const getServerSideProps = withPageAuthRequired({
+    async getServerSideProps(ctx) {
+      const props = await getAppProps(ctx)
+      return {
+        props
+      }
+    }
   });
