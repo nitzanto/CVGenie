@@ -16,35 +16,22 @@ export default async function handler(req, res) {
 
   const protocol =
     process.env.NODE_ENV === "development" ? "http://" : "https://";
-  
-    const host = req.headers.host;
+
+  const host = req.headers.host;
 
   const checkoutSession = await stripe.checkout.sessions.create({
     line_items: lineItems,
     mode: "payment",
     success_url: `${protocol}${host}/success`,
+    payment_intent_data: {
+      metadata: {
+        sub: user.sub,
+      },
+    },
+    metadata: {
+      sub: user.sub,
+    },
   });
 
-  const client = await clientPromise;
-
-  const db = client.db("WebApp");
-
-  const userProfile = await db.collection("users").updateOne(
-    {
-      auth0Id: user.sub,
-    },
-    {
-      $inc: {
-        availableTokens: 10,
-      },
-      $setOnInsert: {
-        auth0Id: user.sub,
-      },
-    },
-    {
-      upsert: true,
-    }
-  );
-
-  res.status(200).json({ session: checkoutSession});
+  res.status(200).json({ session: checkoutSession });
 }
