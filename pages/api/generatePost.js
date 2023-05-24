@@ -22,12 +22,12 @@ export default withApiAuthRequired(async function handler(req, res) {
 
   const { topic, keywords } = req.body;
 
-  if (!topic || !keywords) {
+  if(!topic || !keywords) {
     res.status(422);
     return;
   }
 
-  if (topic.length > 80 || keywords.length > 80) {
+  if(topic.length > 200 || keywords.length > 200) {
     res.status(422);
     return;
   }

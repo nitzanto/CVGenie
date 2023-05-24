@@ -37,11 +37,12 @@ export default function NewPost(props) {
 
   return (
     <div className="h-full overflow-hidden">
-      {!!generating &&
-      <div className="text-green-500 flex h-full animate-pulse w-full flex-col justify-center items-center">
-        <FontAwesomeIcon icon={faBrain} className="text-8xl"/>
-        <h6>Generating...</h6>
-      </div>}
+      {!!generating && (
+        <div className="text-green-500 flex h-full animate-pulse w-full flex-col justify-center items-center">
+          <FontAwesomeIcon icon={faBrain} className="text-8xl" />
+          <h6>Generating...</h6>
+        </div>
+      )}
       {!generating && (
         <div className="w-full h-full flex flex-col overflow-auto">
           <form
@@ -56,6 +57,7 @@ export default function NewPost(props) {
                 className="resize-none border border-slate-500 w-full block my-2 px-4 py-2 rounded-sm"
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
+                maxLength={200}
               />
             </div>
 
@@ -67,13 +69,18 @@ export default function NewPost(props) {
                 className="resize-none border border-slate-500 w-full block my-2 px-4 py-2 rounded-sm"
                 value={keywords}
                 onChange={(e) => setKeyWords(e.target.value)}
+                maxLength={200}
               />
               <small className="block mb-2">
                 Seperate keywords with a comma
               </small>
             </div>
 
-            <button type="submit" className="btn">
+            <button
+              type="submit"
+              className="btn"
+              disabled={!topic.trim() || !keywords.trim()}
+            >
               Generate
             </button>
           </form>
@@ -91,6 +98,16 @@ NewPost.getLayout = function getLayout(page, pageProps) {
 export const getServerSideProps = withPageAuthRequired({
   async getServerSideProps(ctx) {
     const props = await getAppProps(ctx);
+
+    if (!props.availableTokens) {
+      return {
+        redirect: {
+          destination: "/token-topup",
+          permanent: false,
+        },
+      };
+    }
+
     return {
       props,
     };
