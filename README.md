@@ -9,7 +9,6 @@
   <p align="center">
     CVGenie, a software as a service application that utilizes generative AI
 to tailor resumes to job descriptions, enhancing job seekers chances of success.
-
     <br />
     <a href="https://openai.com/"><strong>Explore OpenAI »</strong></a>
     <br />
