@@ -49,7 +49,7 @@ Post.getLayout = function getLayout(page, pageProps) {
 
 export const getServerSideProps = withPageAuthRequired({
   async getServerSideProps(ctx) {
-    const props = await getAppProps(ctx)
+    const props = await getAppProps(ctx);
 
     const userSession = await getSession(ctx.req, ctx.res);
     const client = await clientPromise;
@@ -77,6 +77,7 @@ export const getServerSideProps = withPageAuthRequired({
         title: post.title,
         metaDescription: post.metaDescription,
         keywords: post.keywords,
+        postCreated: post.created.toString(),
         ...props,
       },
     };

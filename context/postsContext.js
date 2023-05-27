@@ -6,25 +6,12 @@ export default PostsContext;
 
 export const PostsProvider = ({ children }) => {
   const [posts, setPosts] = useState([]);
+  const [noMorePosts, setNoMorePosts] = useState(false);
 
   const setPostsFromSSR = useCallback((postsFromSSR = []) => {
-    setPosts(postsFromSSR);
-  }, []);
-
-  const getPosts = useCallback(async ({ lastPostDate }) => {
-    const result = await fetch("/api/getPosts", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ lastPostDate }),
-    });
-    const json = await result.json();
-    const postsResult = json.posts || [];
-    console.log("POSTS RESULT: ", postsResult);
     setPosts((value) => {
       const newPosts = [...value];
-      postsResult.forEach((post) => {
+      postsFromSSR.forEach((post) => {
         const exists = newPosts.find((p) => p._id === post._id);
         if (!exists) {
           newPosts.push(post);
@@ -34,8 +21,39 @@ export const PostsProvider = ({ children }) => {
     });
   }, []);
 
+  const getPosts = useCallback(
+    async ({ lastPostDate, getNewerPosts = false }) => {
+      const result = await fetch("/api/getPosts", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ lastPostDate, getNewerPosts }),
+      });
+
+      const json = await result.json();
+      const postsResult = json.posts || [];
+      // console.log("POSTS RESULT: ", postsResult);
+      if (postsResult.length < 5) setNoMorePosts(true);
+
+      setPosts((value) => {
+        const newPosts = [...value];
+        postsResult.forEach((post) => {
+          const exists = newPosts.find((p) => p._id === post._id);
+          if (!exists) {
+            newPosts.push(post);
+          }
+        });
+        return newPosts;
+      });
+    },
+    []
+  );
+
   return (
-    <PostsContext.Provider value={{ posts, setPostsFromSSR, getPosts }}>
+    <PostsContext.Provider
+      value={{ posts, setPostsFromSSR, getPosts, noMorePosts }}
+    >
       {children}
     </PostsContext.Provider>
   );
