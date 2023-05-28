@@ -33,29 +33,19 @@ export default function Post(props) {
   };
 
   return (
-    <div className="overflow-auto h-full">
+    <div className="overflow-auto h-full bg-gradient-to-r from-gray-100 to-gray-300">
       <div className="max-w-screen-sm mx-auto">
-        <div className="text-sm font-bold mt-6 p-2 bg-stone-200 rounded-sm">
-          SEO title and meta description
+        <div className="text-sm font-bold mt-6 p-2 bg-stone-300/40 rounded-sm">
+          Summary
         </div>
         <div className="p-4 my-2 border border-stone-200 rounded-md">
           <div className="text-blue-600 text-2xl font-bold">{props.title}</div>
-          <div className="mt-2">{props.metaDescription}</div>
+          <div className="mt-2">{props.summary}</div>
         </div>
 
-        <div className="text-sm font-bold mt-6 p-2 bg-stone-200 rounded-sm">
-          Keywords
-        </div>
-        <div className="flex flex-wrap pt-2 gap-1">
-          {props.keywords.split(",").map((keyword, i) => (
-            <div key={i} className="p-2 rounded-full bg-slate-800 text-white">
-              <FontAwesomeIcon icon={faHashtag} />
-              {keyword}
-            </div>
-          ))}
-        </div>
-        <div className="text-sm font-bold mt-6 p-2 bg-stone-200 rounded-sm">
-          Blog post
+  
+        <div className="text-sm font-bold mt-6 p-2 bg-stone-300/40 rounded-sm">
+          Tailored CV
         </div>
 
         <div dangerouslySetInnerHTML={{ __html: props.postContent || "" }} />
@@ -131,8 +121,7 @@ export const getServerSideProps = withPageAuthRequired({
         id: ctx.params.postID,
         postContent: post.postContent,
         title: post.title,
-        metaDescription: post.metaDescription,
-        keywords: post.keywords,
+        summary: post.summary,
         postCreated: post.created.toString(),
         ...props,
       },

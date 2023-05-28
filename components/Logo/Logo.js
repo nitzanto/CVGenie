@@ -1,9 +1,8 @@
-import { faBrain } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export const Logo = () => {
-  return <div className="text-3xl text-center py-4 font-heading">
-    Blog
-    <FontAwesomeIcon icon={faBrain} className="text-2xl text-slate-400"/>
+export const Logo = ({ className, size}) => {
+  return <div className={className}>
+        <div className={size}>
+    <img src="https://i.imgur.com/sMS8SrW.png" className="w-full h-auto max-w-full" alt="CV-Genie Logo" />
+    </div>
   </div>;
 };

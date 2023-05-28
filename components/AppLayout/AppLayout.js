@@ -34,7 +34,7 @@ export const AppLayout = ({
     <div className="grid grid-cols-[300px_1fr] h-screen max-h-screen">
       <div className="flex flex-col text-white overflow-hidden">
         <div className="bg-slate-800 px-2">
-          <Logo />
+          <Logo className="relative w-36 h-36 justify-center mx-auto align-middle"></Logo>
           <Link href="/post/new" className="btn">
             New post
           </Link>
@@ -53,7 +53,7 @@ export const AppLayout = ({
                 postID === post._id ? "bg-white/20 border-white" : ""
               } `}
             >
-              {post.topic}
+              {post.jobDescription}
             </Link>
           ))}
           {!noMorePosts && (

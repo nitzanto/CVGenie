@@ -20,14 +20,14 @@ export default withApiAuthRequired(async function handler(req, res) {
   });
   const openai = new OpenAIApi(config);
 
-  const { topic, keywords } = req.body;
+  const { jobDescription} = req.body;
 
-  if(!topic || !keywords) {
+  if(!jobDescription) {
     res.status(422);
     return;
   }
 
-  if(topic.length > 200 || keywords.length > 200) {
+  if(jobDescription.length > 600) {
     res.status(422);
     return;
   }
@@ -37,13 +37,15 @@ export default withApiAuthRequired(async function handler(req, res) {
     messages: [
       {
         role: 'system',
-        content: 'You are a blog post generator.',
+        content: 'You are a CV generator.',
       },
       {
         role: 'user',
-        content: `Write a long and detailed SEO-friendly blog post about ${topic}, that targets the following comma-separated keywords: ${keywords}. 
-      The response should be formatted in SEO-friendly HTML, 
-      limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, i, ul, li, ol.`,
+        content: `Write a long and detailed CV for the following Job Description: ${jobDescription}, extract keywords from it and make sure to include it. Make it with XYZ formatting and should be by MIT standards for CVs. Do not include a summary section in the CV.
+        The CV should have a relevant information, Education, Expreience, Projects include a short summary for each project and Skills should be seperated by programming languages,frontend, backend, databases, version control, additional skills, soft skills, etc. 
+        The response should be formatted in SEO-friendly HTML, 
+        limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, i, ul, li, ol.
+        h1 will be colored with blue, h2 will be colored with purple.`,
       },
     ],
     temperature: 0,
@@ -56,13 +58,15 @@ export default withApiAuthRequired(async function handler(req, res) {
     messages: [
       {
         role: 'system',
-        content: 'You are a blog post generator.',
+        content: 'You are a CV generator.',
       },
       {
         role: 'user',
-        content: `Write a long and detailed SEO-friendly blog post about ${topic}, that targets the following comma-separated keywords: ${keywords}. 
-      The response should be formatted in SEO-friendly HTML, 
-      limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, i, ul, li, ol.`,
+        content: `Write a long and detailed CV for the following Job Description: ${jobDescription}, extract keywords from it and make sure to include it. Make it with XYZ formatting and should be by MIT standards for CVs. Do not include a summary section in the CV.
+        The CV should have a relevant information, Education, Expreience, Projects include a short summary for each project and Skills should be seperated by programming languages,frontend, backend, databases, version control, additional skills, soft skills, etc. 
+        The response should be formatted in SEO-friendly HTML, 
+        limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, i, ul, li, ol.
+        h1 will be colored with blue, h2 will be colored with purple.`,
       },
       {
         role: 'assistant',
@@ -70,24 +74,26 @@ export default withApiAuthRequired(async function handler(req, res) {
       },
       {
         role: 'user',
-        content: 'Generate appropriate title tag text for the above blog post',
+        content: 'Generate appropriate title tag text for the above CV. You are the person applying for the job.',
       },
     ],
     temperature: 0,
   });
 
-  const metaDescriptionResult = await openai.createChatCompletion({
+  const summaryResult = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages: [
       {
         role: 'system',
-        content: 'You are a blog post generator.',
+        content: 'You are a CV generator.',
       },
       {
         role: 'user',
-        content: `Write a long and detailed SEO-friendly blog post about ${topic}, that targets the following comma-separated keywords: ${keywords}. 
-      The response should be formatted in SEO-friendly HTML, 
-      limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, i, ul, li, ol.`,
+        content: `Write a long and detailed CV for the following Job Description: ${jobDescription}, extract keywords from it and make sure to include it. Make it with XYZ formatting and should be by MIT standards for CVs. Do not include a summary section in the CV.
+        The CV should have a relevant information, Education, Expreience, Projects include a short summary for each project and Skills should be seperated by programming languages,frontend, backend, databases, version control, additional skills, soft skills, etc. 
+        The response should be formatted in SEO-friendly HTML, 
+        limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, i, ul, li, ol.
+        h1 will be colored with blue, h2 will be colored with purple.`,
       },
       {
         role: 'assistant',
@@ -96,19 +102,19 @@ export default withApiAuthRequired(async function handler(req, res) {
       {
         role: 'user',
         content:
-          'Generate SEO-friendly meta description content for the above blog post',
+          'You are the person applying for the job. Do not include the letter "I" when talking about self. Generate a short and relevant summary In First Person for the above CV which is yours.',
       },
     ],
     temperature: 0,
   });
 
   const title = titleResult.data.choices[0]?.message.content;
-  const metaDescription =
-    metaDescriptionResult.data.choices[0]?.message.content;
+  const summary =
+    summaryResult.data.choices[0]?.message.content;
 
   console.log('POST CONTENT: ', postContent);
   console.log('TITLE: ', title);
-  console.log('META DESCRIPTION: ', metaDescription);
+  console.log('META DESCRIPTION: ', summary);
 
   await db.collection('users').updateOne(
   {
@@ -124,9 +130,8 @@ export default withApiAuthRequired(async function handler(req, res) {
   const post = await db.collection('posts').insertOne({
     postContent: postContent || '',
     title: title || '',
-    metaDescription: metaDescription || '',
-    topic,
-    keywords,
+    summary: summary || '',
+    jobDescription,
     userId: userProfile._id,
     created: new Date(),
   });

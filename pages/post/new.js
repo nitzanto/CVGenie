@@ -8,8 +8,7 @@ import { faBrain } from "@fortawesome/free-solid-svg-icons";
 
 export default function NewPost(props) {
   const router = useRouter();
-  const [topic, setTopic] = useState("");
-  const [keywords, setKeyWords] = useState("");
+  const [jobDescription, setjobDescription] = useState("");
   const [generating, setGenerating] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -22,7 +21,7 @@ export default function NewPost(props) {
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify({ topic, keywords }),
+        body: JSON.stringify({ jobDescription }),
       });
 
       const json = await response.json();
@@ -36,9 +35,9 @@ export default function NewPost(props) {
   };
 
   return (
-    <div className="h-full overflow-hidden">
+    <div className="h-full overflow-hidden bg-gradient-to-r from-gray-100 to-gray-300">
       {!!generating && (
-        <div className="text-green-500 flex h-full animate-pulse w-full flex-col justify-center items-center">
+        <div className="text-blue-500 flex h-full animate-pulse w-full flex-col justify-center items-center">
           <FontAwesomeIcon icon={faBrain} className="text-8xl" />
           <h6>Generating...</h6>
         </div>
@@ -47,39 +46,27 @@ export default function NewPost(props) {
         <div className="w-full h-full flex flex-col overflow-auto">
           <form
             onSubmit={handleSubmit}
-            className="m-auto w-full max-w-screen-sm bg-slate-100 p-4 rounded-md shadow-xl border border-slate-200 shadow-slate-200"
-          >
+            className="m-auto w-full max-w-screen-sm bg-slate-100 p-4 rounded-md  border border-slate-200 shadow-slate-200"            >
             <div>
               <label>
-                <strong>Generate a blog post on the topic of:</strong>
+                <strong>Generate a CV on the job description of:</strong>
               </label>
               <textarea
-                className="resize-none border border-slate-500 w-full block my-2 px-4 py-2 rounded-sm"
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
-                maxLength={200}
+                className="resize-none border border-slate-500 w-full block my-2 px-4 py-2 h-60 rounded-sm"
+                value={jobDescription}
+                onChange={(e) => setjobDescription(e.target.value)}
+                maxLength={600}
               />
-            </div>
-
-            <div>
-              <label>
-                <strong>Targeting the following keywords:</strong>
-              </label>
-              <textarea
-                className="resize-none border border-slate-500 w-full block my-2 px-4 py-2 rounded-sm"
-                value={keywords}
-                onChange={(e) => setKeyWords(e.target.value)}
-                maxLength={200}
-              />
-              <small className="block mb-2">
-                Seperate keywords with a comma
+                   <small className="block mb-2">
+                Up to 1000 characters
               </small>
             </div>
 
+
             <button
               type="submit"
-              className="btn"
-              disabled={!topic.trim() || !keywords.trim()}
+              className="btn bg-gray-500"
+              disabled={!jobDescription.trim()}
             >
               Generate
             </button>
