@@ -14,13 +14,12 @@ to tailor resumes to job descriptions, enhancing job seekers chances of success.
     <br />
     <br />
     <h2><a>Demonstration</a></h2>
-    <strong>To-add</strong>
+        <a href="https://www.youtube.com/watch?v=Trsp5mValB0&ab_channel=NitzanToledo"><strong>Youtube Video »</strong></a>
     <br />
     <br />
-    
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/120420731/241813707-0aef1357-82e2-47b7-9a23-2b4ca4017964.png" />
   </p>
   
-
 
 
 
@@ -55,14 +54,3 @@ CV-Genie is an SaaS application designed to revolutionize the resume (CV) creati
 <h2 align="center"><a>RoadMap</a></h2>
 
 </div>
-
-
-<h2 align="center"><a>Installion</a></h2>
-    <p align="center">
-        <b>To add </b>
-      </p>
-</div>
-
-
-
-
