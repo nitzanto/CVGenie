@@ -51,6 +51,21 @@ CV-Genie is an SaaS application designed to revolutionize the resume (CV) creati
 </div>
 
 
-<h2 align="center"><a>RoadMap</a></h2>
+<h2 align="center"><a>Features</a></h2>
 
 </div>
+
+
+* Implemented MongoDB to efficiently store user data, including
+personal information, tokens, and chat history, ensuring data
+integrity and security.
+* Utilized NextJS, for server-side rendering and API routes, building
+robust and scalable infrastructure, ensuring smooth performance
+and seamless user experience.
+* Utilized React, in combination with Tailwind for the frontend, to
+create an intuitive and visually appealing user interface.
+* Incorporated Auth0 for user login and authorization, providing a
+secure and user-friendly authentication process for CVGenie users.
+* Implemented Stripe payment gateway to facilitate secure and
+transactions for users who wish to purchase tokens, enabling them
+to generate multiple tailored resumes.
